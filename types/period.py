@@ -1,4 +1,4 @@
-from core.std.types import Numeric, dataclass, pd
+from corex.std.types import Numeric, dataclass, pd
 
 
 class Epoch:
