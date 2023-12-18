@@ -1,2 +1,2 @@
 # corex
-Opinionated std python lib
+Opinionated python std lib
