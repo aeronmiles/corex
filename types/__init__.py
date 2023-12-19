@@ -1,3 +1,3 @@
 from .base import *
-from .period import (Periods, Period)
+from .period import Period
 from typing import Coroutine
