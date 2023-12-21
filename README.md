@@ -1,2 +1,2 @@
 # corex
-Opinionated python std lib
+Opinionated data science python core lib
