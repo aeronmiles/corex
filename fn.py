@@ -1,7 +1,14 @@
 from functools import reduce
 import json
+import os
 import time
 from typing import Callable
+
+
+def check_path(path: str) -> str:
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return path
 
 
 def compose(*functions):
