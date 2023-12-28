@@ -2,6 +2,7 @@
 from functools import *
 from itertools import *
 from operator import *
+
 import os
 import sys
 import json
@@ -9,15 +10,16 @@ import time
 import threading
 import math
 import copy
+import typing
 
-# MANAGER
-from .manager import *
+# ENV
+from .env import EnvValidator, env_var
 
 # LOGGING
 from .logging import logger
 
-# ENV
-from .env import EnvValidator, env_var
+# MANAGER
+from .manager import *
 
 # TYPES
 from .types import *
