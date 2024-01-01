@@ -1,8 +1,4 @@
 # STD LIB
-from functools import *
-from itertools import *
-from operator import *
-
 import os
 import sys
 import json
@@ -13,7 +9,7 @@ import copy
 import typing
 
 # ENV
-from .env import EnvValidator, env_var
+from .env import EnvVars, env_var
 
 # LOGGING
 from .logging import logger
@@ -32,3 +28,6 @@ from .ds import *
 
 # MACHINE LEARNING
 from .ml import *
+
+# POLICY ENGINE
+from .policy import *

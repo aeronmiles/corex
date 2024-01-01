@@ -1,11 +1,15 @@
-from abc import ABC, abstractmethod
 import os
-from typing import Any, List, Tuple
+from pathlib import Path
+from typing import Any, List, TypeVar, get_type_hints
 from dotenv import load_dotenv
 from .logging import logger
+from .types.base import Immutable
 
 
 load_dotenv()
+
+
+T = TypeVar("T")
 
 
 def env_var(name: str, default: Any=None) -> Any:
@@ -17,22 +21,28 @@ def env_var(name: str, default: Any=None) -> Any:
         return default
 
 
-class EnvValidator(ABC):
+class EnvVars(Immutable):
     def __init__(self):
-        required_vars = self._required_env_vars()
-        for var_name, var_type in required_vars:
-            value = os.getenv(var_name)
-            if value is None:
-                raise ValueError(f"Environment variable {var_name} is not set")
-            try:
-                # Convert to the specified type
-                var_type(value)
-            except ValueError:
-                raise ValueError(f"Environment variable {var_name} cannot be converted to {var_type}")
+        for attr, attr_type in get_type_hints(self.__class__).items():
+            if isinstance(attr_type, type) and issubclass(attr_type, EnvVars):
+                nested_env_var_instance = attr_type()
+                object.__setattr__(self, attr, nested_env_var_instance)
+            else:
+                env_value = os.getenv(attr)
+                if env_value is not None:
+                    object.__setattr__(self, attr, self._convert_type(env_value, attr_type))
 
-    @abstractmethod
-    def _required_env_vars(self) -> List[Tuple[str, type]]:
-        """
-        Returns a list of tuples with required environment variables and their expected types.
-        """
-        raise NotImplementedError("All subclasses must implement the _required_env_vars method")
+    def _convert_type(self, value: str, target_type: Any) -> Any:
+        """Converts the string value to the specified target type."""
+        if target_type is bool:
+            return value.lower() in ['true', '1', 'yes']
+        elif target_type is int:
+            return int(value)
+        elif target_type is float:
+            return float(value)
+        elif target_type is List[str]:
+            return value.split(',')
+        elif target_type is Path:
+            return Path(value)
+        else:
+            return value

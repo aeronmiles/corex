@@ -4,5 +4,12 @@ from abc import (ABC, abstractmethod)
 from dataclasses import dataclass
 from enum import Enum
 
+
 Numeric = Union[int, float]
+
+
+class Immutable(ABC):
+    """Base class for immutable objects."""
+    def __setattr__(self, key, value):
+        raise AttributeError("Cannot modify immutable object")
 

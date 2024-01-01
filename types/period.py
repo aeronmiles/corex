@@ -1,8 +1,8 @@
-from corex.types import Numeric
-from dataclasses import dataclass
+from .base import Numeric
 
 
 class Epoch:
+    """Interval of time in milliseconds"""
     def __init__(self, begin: int, end: int):
         self.__begin = begin
         self.__end = end
@@ -16,11 +16,8 @@ class Epoch:
         return self.__end
 
 
-@dataclass
 class Period:
-    interval: str
-    _minutes: Numeric
-
+    """Interval of time in minutes"""
     def __init__(self, interval: str, minutes: Numeric):
         self.interval = interval
         self._minutes = minutes

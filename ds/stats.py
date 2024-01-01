@@ -1,6 +1,6 @@
 from typing import List
 import numpy as np
-from corex import logger  # noqa
+from corex import logger
 
 
 class Stats:

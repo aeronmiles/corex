@@ -5,7 +5,6 @@ from typing import Any, Optional
 from dotenv import load_dotenv
 from loguru._logger import Logger, Core
 from loguru import _defaults
-from .manager import Singletons
 
 
 load_dotenv()
@@ -20,7 +19,7 @@ def _env(name: str, default: Optional[Any] = None) -> Optional[Any]:
         raise KeyError(e)
 
 
-class _Logger(Logger):
+class _CorexLogger(Logger):
     def __init__(self):
         super().__init__( 
             core=Core(),
@@ -53,5 +52,5 @@ class _Logger(Logger):
         _atexit.register(self.remove)
 
 
-logger = Singletons.get(_Logger, {}, "corex")
+logger = _CorexLogger()
 

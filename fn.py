@@ -1,4 +1,4 @@
-from functools import reduce
+from functools import reduce as _reduce
 import json
 import os
 import time
@@ -12,7 +12,7 @@ def check_path(path: str) -> str:
 
 
 def compose(*functions):
-    return reduce(lambda f, g: lambda x: f(g(x)), functions)
+    return _reduce(lambda f, g: lambda x: f(g(x)), functions)
 
 
 def apply(x, func: Callable):
