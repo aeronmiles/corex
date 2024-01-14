@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, List, TypeVar, get_type_hints
 from dotenv import load_dotenv
 from .logging import logger
-from .types.base import Immutable
+from .types.base import ImmutableAttr
 
 
 load_dotenv()
@@ -21,7 +21,7 @@ def env_var(name: str, default: Any=None) -> Any:
         return default
 
 
-class EnvVars(Immutable):
+class EnvVars(ImmutableAttr):
     def __init__(self):
         for attr, attr_type in get_type_hints(self.__class__).items():
             if isinstance(attr_type, type) and issubclass(attr_type, EnvVars):

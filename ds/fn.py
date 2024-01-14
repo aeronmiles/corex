@@ -17,7 +17,7 @@ def to_df(
 ) -> pd.DataFrame:
     """Converts a list or dict to a pandas DataFrame."""
     df = pd.DataFrame(data)
-    df.columns = cols
+    df.columns = pd.Index(cols)
     df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)
     for col in time_cols:
         df[col] = pd.to_datetime(df[col], unit=time_unit)
