@@ -1,4 +1,5 @@
 from typing import Dict, List, Union
+import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
@@ -38,6 +39,11 @@ def optimal_clusters(data, max_k):
     int: Optimal number of clusters.
     """
 
+    if not isinstance(data, pd.DataFrame):
+        raise ValueError("Input data must be a pandas DataFrame.")
+    if not isinstance(max_k, int) or max_k <= 0:
+        raise ValueError("max_k must be a positive integer.")
+
     # Normalize the data
     scaler = StandardScaler()
     scaled_data = scaler.fit_transform(data)
@@ -57,15 +63,22 @@ def optimal_clusters(data, max_k):
     plt.ylabel("WCSS")
     plt.show()
 
-    # Determine the elbow point
-    # This can be done visually from the plot, or by using an algorithmic approach
-    # Here we are choosing visually, but you can implement additional methods
-    # to find the elbow point algorithmically if desired.
+    # Determine the elbow point algorithmically (optional)
+    def find_elbow_point(wcss):
+        deltas = np.diff(wcss)
+        accelerations = np.diff(deltas)
+        elbow_point = np.argwhere(accelerations > 0)[0, 0] + 2  # +2 due to double np.diff
+        return elbow_point
 
-    logger.info("Check the plot to determine the elbow point.")
+    elbow_point = find_elbow_point(wcss)
+    logger.info(f"Suggested optimal number of clusters based on elbow detection: {elbow_point}")
 
-    # Choose an optimal k based on the Elbow Method visually
-    optimal_k = int(input("Enter the optimal number of clusters: "))
+    # Allow visual check
+    try:
+        optimal_k = int(input("Enter the optimal number of clusters: "))
+    except ValueError:
+        logger.error("Invalid input. Using the suggested optimal number of clusters.")
+        optimal_k = elbow_point
 
     # Run K-means with the optimal number of clusters
     kmeans = KMeans(n_clusters=optimal_k, init='k-means++', random_state=42)
@@ -86,4 +99,32 @@ def optimal_clusters(data, max_k):
     plt.legend()
     plt.show()
 
-    return None  # Returns None as the elbow point is determined visually
+    return optimal_k, labels  # Return the optimal number of clusters and labels
+
+  
+def plot_columns(df: pd.DataFrame, columns: Union[List[str], str]):
+  """
+  Plots the specified columns from a DataFrame with a time-based index.
+
+  Parameters:
+  df (pd.DataFrame): DataFrame with a time-based index.
+  columns (list): List of column names to plot.
+
+  Returns:
+  None
+  """
+  for c in df.columns:
+    if c not in df.columns:
+      raise ValueError(f"{c} not in the DataFrame")
+  
+  plt.figure(figsize=(14, 7))
+
+  for column in columns:
+      plt.plot(df.index, df[column], label=column)
+
+  plt.xlabel('Time')
+  plt.ylabel('Value')
+  plt.title('Time Series Data')
+  plt.legend()
+  plt.grid(True)
+  plt.show()

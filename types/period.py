@@ -59,3 +59,21 @@ class Period:
 
     def __repr__(self) -> str:
         return self.interval
+      
+    @property
+    def pandas_freq(self) -> str:
+        """Convert to Pandas time string for resampling"""
+        if self._minutes < 1:
+            return f'{int(self._minutes * 60)}S'
+        elif self._minutes < 60:
+            return f'{int(self._minutes)}T'
+        elif self._minutes < 1440:
+            return f'{int(self._minutes / 60)}H'
+        elif self._minutes < 10080:
+            return f'{int(self._minutes / 1440)}D'
+        elif self._minutes < 43800:
+            return f'{int(self._minutes / 10080)}W'
+        elif self._minutes < 525600:
+            return f'{int(self._minutes / 43800)}M'
+        else:
+            return f'{int(self._minutes / 525600)}Y'
