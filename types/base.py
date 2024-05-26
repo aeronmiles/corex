@@ -8,8 +8,8 @@ from enum import Enum
 Numeric = Union[int, float]
 
 
-class Immutable(ABC):
+class ImmutableAttr(ABC):
     """Base class for immutable objects."""
     def __setattr__(self, key, value):
-        raise AttributeError("Cannot modify immutable object")
+        raise AttributeError("Cannot modify immutable attr")
 
