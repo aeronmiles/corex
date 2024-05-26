@@ -87,3 +87,12 @@ def optimal_clusters(data, max_k):
     plt.show()
 
     return None  # Returns None as the elbow point is determined visually
+
+
+# matplotlib dark background decorator
+def matplotlib_dark(func):
+    def wrapper(*args, **kwargs):
+        with plt.style.context('dark_background'):
+            func(*args, **kwargs)
+
+    return wrapper
